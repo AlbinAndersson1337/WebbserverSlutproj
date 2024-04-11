@@ -100,7 +100,7 @@ ul li {
 }
 
 .show {
-  display: block;
+  display: block !important;
 }
 
 .footer {

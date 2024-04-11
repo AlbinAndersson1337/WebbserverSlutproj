@@ -148,17 +148,24 @@ app.get("/logout", (req, res) => {
 });
 
 app.post("/api/lists", async (req, res) => {
-  const { name } = req.body;
+  const { list_name } = req.body;
   const userId = req.session.user.id;
 
-  if (!name) {
+  if (!list_name) {
     return res.status(400).json({ message: "List Name is required" });
+  }
+
+  if (!req.session.isLoggedIn || !req.session.user) {
+    return res.status(403).json({ message: "Not authorized" });
   }
 
   try {
     const [result] = await db
       .promise()
-      .query("INSERT INTO lists (name, user_id) VALUES (?, ?)", [name, userId]);
+      .query("INSERT INTO lists (list_name, user_id) VALUES (?, ?)", [
+        list_name,
+        userId,
+      ]);
 
     const [newList] = await db
       .promise()
