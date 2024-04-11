@@ -1,0 +1,39 @@
+<html lang="sv">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TO-DO Lists</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <nav>
+      <h4>Min fina sida</h4>
+      <ul>
+        {{#if user}}
+          <li>Välkommen, {{user.name}}!</li>
+          <li><a href="/logout">Logga ut</a></li>
+          <li><a href="/todo">Hem</a></li>
+        {{else}}
+          <li><a href="/">Hem</a></li>
+
+          <li><a href="/login">Logga in</a></li>
+          <li><a href="/register">Registrera</a></li>
+        {{/if}}
+      </ul>
+    </nav>
+
+    <div class="container">
+      <div class="card">
+        <div class="card-header">Välkommen till To-Do Lists AB</div>
+        <div class="card-body">
+          <a href="/login" class="btn">Logga in</a>
+          <a href="/register" class="btn">Registrera dig</a>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <p>© 2024 To-Do Lists AB. Alla rättigheter förbehållna.</p>
+    </footer>
+  </body>
+</html>

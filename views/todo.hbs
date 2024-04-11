@@ -1,0 +1,66 @@
+<html lang="sv">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TO-DO Lists</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <nav>
+      <h4>Min fina sida</h4>
+      <ul>
+        {{#if user}}
+          <li>Välkommen, {{user.name}}!</li>
+          <li><a href="/logout">Logga ut</a></li>
+          <li><a href="/todo">Hem</a></li>
+        {{else}}
+          <li><a href="/">Hem</a></li>
+
+          <li><a href="/login">Logga in</a></li>
+          <li><a href="/register">Registrera</a></li>
+        {{/if}}
+      </ul>
+    </nav>
+
+    <div class="todo-container">
+      <div class="todo-lists">
+        <h2>My Lists</h2>
+        <!-- List of lists goes here -->
+        <button class="btn-add">Add List</button>
+        <input
+          type="text"
+          id="list-name-input"
+          class="list-name-input"
+          style="display:none;"
+          placeholder="Listans namn"
+        />
+        <button
+          id="save-list-button"
+          class="save-list-button"
+          style="display:none;"
+        >Spara lista</button>
+
+      </div>
+      <div class="todo-details">
+        <h2>Details / Tips</h2>
+        <div class="details-content">
+          <h3>Today's Tip</h3>
+          <p>Start your day by tackling the most challenging task. It gives you
+            a sense of achievement and makes the rest of the day feel more
+            manageable.</p>
+          <h3>Your Stats This Week</h3>
+          <ul>
+            <li>Tasks completed: 15</li>
+          </ul>
+          <h3>Inspiration</h3>
+          <p>"Your limitation—it's only your imagination."</p>
+        </div>
+      </div>
+
+    </div>
+
+    <footer class="footer">
+      <p>© 2024 To-Do Lists AB. Alla rättigheter förbehållna.</p>
+    </footer>
+  </body>
+</html>
