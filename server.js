@@ -17,10 +17,6 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use(cors());
 
-app.get("/api/lists", cors(), (req, res) => {
-  res.json({ message: "This route supports CORS" });
-});
-
 app.use(
   session({
     secret: "123",
@@ -170,6 +166,24 @@ app.post("/api/lists", async (req, res) => {
   } catch (error) {
     console.error("Error creating list:", error);
     res.status(500).json({ message: "Internt serverfel." });
+  }
+});
+
+app.get("/api/lists", async (req, res) => {
+  // Kontrollera att användaren är inloggad
+  if (!req.session || !req.session.user) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  try {
+    // Ersätt 'db' med din databasanslutningsvariabel om annan
+    const [lists] = await db.query("SELECT * FROM lists WHERE user_id = ?", [
+      req.session.user.id,
+    ]);
+    res.json(lists);
+  } catch (error) {
+    console.error("Failed to fetch lists:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 

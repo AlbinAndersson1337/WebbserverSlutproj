@@ -1,15 +1,14 @@
-document.addEventListener("DOMContentLoaded", () => {
-  fetch("/api/lists", {
-    credentials: "include", // Se till att cookies med session-ID skickas med
+fetch("/api/lists", {
+  credentials: "include",
+})
+  .then((response) => response.json())
+  .then((lists) => {
+    const listsContainer = document.getElementById("lists");
+    console.log("Lists:", lists);
+    lists.forEach((list) => {
+      const listElement = document.createElement("div");
+      listElement.textContent = list.list_name;
+      listsContainer.appendChild(listElement);
+    });
   })
-    .then((response) => response.json())
-    .then((lists) => {
-      const listsContainer = document.getElementById("lists");
-      lists.forEach((list) => {
-        const listElement = document.createElement("div");
-        listElement.textContent = list.list_name;
-        listsContainer.appendChild(listElement);
-      });
-    })
-    .catch((error) => console.error("Error loading lists:", error));
-});
+  .catch((error) => console.error("Error loading lists:", error));
