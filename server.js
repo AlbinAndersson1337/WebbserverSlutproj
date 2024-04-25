@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 const path = require("path");
 const bcrypt = require("bcrypt");
 const session = require("express-session");
+const cors = require("cors");
 
 const app = express();
 dotenv.config({ path: "./.env" });
@@ -14,12 +15,18 @@ app.use(express.json());
 
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use(cors());
+
+app.get("/api/lists", cors(), (req, res) => {
+  res.json({ message: "This route supports CORS" });
+});
+
 app.use(
   session({
     secret: "123",
     resave: false,
-    saveUninitialized: true,
-    cookie: { secure: !true },
+    saveUninitialized: false,
+    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24, httpOnly: true },
   })
 );
 
@@ -149,34 +156,39 @@ app.get("/logout", (req, res) => {
 
 app.post("/api/lists", async (req, res) => {
   const { list_name } = req.body;
-  const userId = req.session.user.id;
-
+  const userId = req.session.user && req.session.user.user_id;
+  console.log("Request body:", req.body);
+  console.log("Session data:", req.session);
   if (!list_name) {
-    return res.status(400).json({ message: "List Name is required" });
-  }
-
-  if (!req.session.isLoggedIn || !req.session.user) {
-    return res.status(403).json({ message: "Not authorized" });
+    return res.status(400).json({ message: "Listans namn är obligatoriskt." });
   }
 
   try {
-    const [result] = await db
-      .promise()
-      .query("INSERT INTO lists (list_name, user_id) VALUES (?, ?)", [
-        list_name,
-        userId,
-      ]);
-
-    const [newList] = await db
-      .promise()
-      .query("SELECT * FROM lists WHERE id = ?", [result.insertId]);
-
-    res.status(201).json(newList[0]);
+    // Antag att du har en funktion som lägger till en lista i databasen
+    const result = await addList(list_name, userId);
+    res.status(201).json(result);
   } catch (error) {
-    console.error("Error creating list", error);
-    res.status(500).send({ message: "Internal server error" });
+    console.error("Error creating list:", error);
+    res.status(500).json({ message: "Internt serverfel." });
   }
 });
+
+function addList(listName, userId) {
+  // Här skulle du interagera med din databas för att lägga till listan
+  return new Promise((resolve, reject) => {
+    db.query(
+      "INSERT INTO lists (list_name, user_id) VALUES (?, ?)",
+      [listName, userId],
+      (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve({ id: result.insertId, name: listName });
+        }
+      }
+    );
+  });
+}
 
 // Starta servern
 const port = process.env.PORT || 4000;
