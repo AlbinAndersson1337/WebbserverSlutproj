@@ -20,7 +20,8 @@ document.addEventListener("DOMContentLoaded", () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ name: listName }),
+          body: JSON.stringify({ list_name: listName }),
+          credentials: "include",
         });
 
         if (response.ok) {
@@ -39,6 +40,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       } catch (error) {
         console.error("Error:", error);
+        console.error("Error on creating list:", error);
+        res
+          .status(500)
+          .json({ message: "Internal server error", error: error.toString() });
       }
     }
   });
