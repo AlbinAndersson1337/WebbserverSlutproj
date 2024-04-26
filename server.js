@@ -180,6 +180,7 @@ app.get("/api/lists", async (req, res) => {
     const [lists] = await db.query("SELECT * FROM lists WHERE user_id = ?", [
       req.session.user.id,
     ]);
+    console.log(lists);
     res.json(lists);
   } catch (error) {
     console.error("Failed to fetch lists:", error);
