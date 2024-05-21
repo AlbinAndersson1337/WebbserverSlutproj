@@ -151,6 +151,8 @@ app.get("/logout", (req, res) => {
 });
 
 app.post("/api/lists", async (req, res) => {
+
+  console.log(req.body); 
   const { list_name } = req.body;
   const userId = req.session.user && req.session.user.user_id;
   console.log("Request body:", req.body);
