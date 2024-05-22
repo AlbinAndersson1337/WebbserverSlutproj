@@ -52,7 +52,26 @@ db.connect((error) => {
 app.get("/", (req, res) => res.render("index"));
 app.get("/register", (req, res) => res.render("register"));
 app.get("/login", (req, res) => res.render("login"));
-app.get("/todo", (req, res) => res.render("todo"));
+app.get("/todo", (req, res) => {
+  db.query(
+    "SELECT * FROM lists WHERE user_id = ?",
+    [req.session.user.user_id],
+    (error, results) => {
+      if (error) {
+        console.error("Error fetching lists: ", error);
+        return res.status(500).send("Server error");
+      }
+
+      lists = results.map((list) => ({ name: list.list_name }));
+      console.log("cooasosaosoaoaoasoas", lists);
+
+      res.render("todo", {
+        lists: lists,
+      });
+    }
+  );
+});
+
 app.get("/", (req, res) => {
   if (req.session.isLoggedIn) {
     res.render("todo", {
@@ -151,8 +170,7 @@ app.get("/logout", (req, res) => {
 });
 
 app.post("/api/lists", async (req, res) => {
-
-  console.log(req.body); 
+  console.log(req.body);
   const { list_name } = req.body;
   const userId = req.session.user && req.session.user.user_id;
   console.log("Request body:", req.body);
@@ -182,7 +200,7 @@ app.get("/api/lists", async (req, res) => {
     const [lists] = await db.query("SELECT * FROM lists WHERE user_id = ?", [
       req.session.user.id,
     ]);
-    console.log(lists);
+    console.log("aaaaaaaaaa", lists);
     res.json(lists);
   } catch (error) {
     console.error("Failed to fetch lists:", error);

@@ -1,4 +1,4 @@
-fetch("/api/lists", {
+/*fetch("/api/lists", {
   credentials: "include",
 })
   .then((response) => response.json())
@@ -11,4 +11,4 @@ fetch("/api/lists", {
       listsContainer.appendChild(listElement);
     });
   })
-  .catch((error) => console.error("Error loading lists:", error));
+  .catch((error) => console.error("Error loading lists:", error));*/
