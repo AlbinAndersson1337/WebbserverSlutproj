@@ -63,7 +63,7 @@ app.get("/todo", (req, res) => {
       }
 
       lists = results.map((list) => ({ name: list.list_name }));
-      console.log("cooasosaosoaoaoasoas", lists);
+      console.log("Lists: ", lists);
 
       res.render("todo", {
         lists: lists,
