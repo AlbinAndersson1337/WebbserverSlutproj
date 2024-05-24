@@ -209,10 +209,11 @@ function addList(listName, userId) {
 //Detta är på din backend (den tar emot fetchen som vi skickade från funktionen "deleteButton.addEventListener('click', function()"
 app.post('/delete', (req, res) => {
   //Här tar vi emot listID som vi skickade från frontend
-  const listID = req.body.list_id;
+  const listID = req.body.listID;
+  console.log("List ID: ", listID)
 
   //Här tar vi bort listan med det listID som vi skickade från frontend
-  db.query("DELETE FROM lists WHERE list_id = ?", [list_id], (error, result) =>{
+  db.query("DELETE FROM lists WHERE list_id = ?", [listID], (error, result) =>{
       if (error) {
           console.log(error);
           res.status(500).send("Error deleting data from database");

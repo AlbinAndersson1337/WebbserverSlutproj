@@ -31,11 +31,15 @@
             <button id="save-list-button" class="save-list-button" style="display:none;">Spara lista</button>
 
               {{#each lists}}
-                 <div class="list-item" data-id="{{id}}">
-                   <span>{{name}}</span>
-                   <button class="btn-delete"'{{id}}'>X</button>
+                 <div class="list-item">
+                   {{name}}
+                
+                <div class="divID">
+                    {{id}}
+                </div>
                 </div>
               {{/each}}
+              <button class="btn-delete">X</button>
 
 
         </div>
@@ -45,8 +49,8 @@
                 <h3>Today's Tip</h3>
                 <p>Start your day by tackling the most challenging task. It gives you a sense of achievement and makes the rest of the day feel more manageable.</p>
 
-                <h3>Inspiration</h3>
-                <p>"Your limitation—it's only your imagination."</p>
+                <h3>Guide</h3>
+                <p>Klicka på listan, sen krysset för att ta bort listan</p>
             </div>
         </div>
     </div>
