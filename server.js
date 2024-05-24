@@ -62,7 +62,7 @@ app.get("/todo", (req, res) => {
         return res.status(500).send("Server error");
       }
 
-      lists = results.map((list) => ({ name: list.list_name }));
+      lists = results.map((list) => ({ id: list.list_id, name: list.list_name }));
       console.log("Lists: ", lists);
 
       res.render("todo", {
@@ -189,25 +189,6 @@ app.post("/api/lists", async (req, res) => {
   }
 });
 
-app.get("/api/lists", async (req, res) => {
-  // Kontrollera att användaren är inloggad
-  if (!req.session || !req.session.user) {
-    return res.status(401).json({ message: "Unauthorized" });
-  }
-
-  try {
-    // Ersätt 'db' med din databasanslutningsvariabel om annan
-    const [lists] = await db.query("SELECT * FROM lists WHERE user_id = ?", [
-      req.session.user.id,
-    ]);
-    console.log("aaaaaaaaaa", lists);
-    res.json(lists);
-  } catch (error) {
-    console.error("Failed to fetch lists:", error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-});
-
 function addList(listName, userId) {
   // Här skulle du interagera med din databas för att lägga till listan
   return new Promise((resolve, reject) => {
@@ -224,6 +205,30 @@ function addList(listName, userId) {
     );
   });
 }
+
+//Detta är på din backend (den tar emot fetchen som vi skickade från funktionen "deleteButton.addEventListener('click', function()"
+app.post('/delete', (req, res) => {
+  //Här tar vi emot listID som vi skickade från frontend
+  const listID = req.body.list_id;
+
+  //Här tar vi bort listan med det listID som vi skickade från frontend
+  db.query("DELETE FROM lists WHERE list_id = ?", [list_id], (error, result) =>{
+      if (error) {
+          console.log(error);
+          res.status(500).send("Error deleting data from database");
+      } else {
+          res.redirect('/todo');
+      }
+  })
+});
+
+
+
+
+
+
+
+
 
 // Starta servern
 const port = process.env.PORT || 4000;

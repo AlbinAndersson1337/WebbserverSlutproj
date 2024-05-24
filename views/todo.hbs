@@ -1,72 +1,108 @@
+<!DOCTYPE html>
 <html lang="sv">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TO-DO Lists</title>
-    <link rel="stylesheet" href="/styles.css" />
-    <script src="/todo.js"></script>
-    <!--<script src="/loadLists.js"></script>-->
-  </head>
-  <body>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/todo.js" defer></script>
+</head>
+<body>
     <nav>
-      <h4>Min fina sida</h4>
-      <ul>
-        {{#if user}}
-          <li>Välkommen, {{user.name}}!</li>
-          <li><a href="/logout">Logga ut</a></li>
-          <li><a href="/todo">Hem</a></li>
-        {{else}}
-          <li><a href="/">Hem</a></li>
-
-          <li><a href="/login">Logga in</a></li>
-          <li><a href="/register">Registrera</a></li>
-        {{/if}}
-      </ul>
+        <h4>Min fina sida</h4>
+        <ul>
+            {{#if user}}
+            <li>Välkommen, {{user.name}}!</li>
+            <li><a href="/logout">Logga ut</a></li>
+            <li><a href="/todo">Hem</a></li>
+            {{else}}
+            <li><a href="/">Hem</a></li>
+            <li><a href="/login">Logga in</a></li>
+            <li><a href="/register">Registrera</a></li>
+            {{/if}}
+        </ul>
     </nav>
 
     <div class="todo-container">
-      <div class="todo-lists">
-        <h2>My Lists</h2>
-        <!-- List of lists goes here -->
-        <button class="btn-add">Add List</button>
-        <input
-          type="text"
-          id="list-name-input"
-          class="list-name-input"
-          style="display:none;"
-          placeholder="Listans namn"
-        />
-        <button
-          id="save-list-button"
-          class="save-list-button"
-          style="display:none;"
-        >Spara lista</button>
+        <div class="todo-lists">
+            <h2>My Lists</h2>
+            <button class="btn-add">Add List</button>
+            <input type="text" id="list-name-input" class="list-name-input" style="display:none;" placeholder="Listans namn">
+            <button id="save-list-button" class="save-list-button" style="display:none;">Spara lista</button>
 
-        {{#each lists}}
-          <div>{{name}}</div>
-        {{/each}}
+              {{#each lists}}
+                 <div class="list-item" data-id="{{id}}">
+                   <span>{{name}}</span>
+                   <button class="btn-delete" onclick="deleteList('{{id}}')">X</button>
+                </div>
+              {{/each}}
 
-      </div>
-      <div class="todo-details">
-        <h2>Details / Tips</h2>
-        <div class="details-content">
-          <h3>Today's Tip</h3>
-          <p>Start your day by tackling the most challenging task. It gives you
-            a sense of achievement and makes the rest of the day feel more
-            manageable.</p>
-          <h3>Your Stats This Week</h3>
-          <ul>
-            <li>Tasks completed: 15</li>
-          </ul>
-          <h3>Inspiration</h3>
-          <p>"Your limitation—it's only your imagination."</p>
+
         </div>
-      </div>
+        <div class="todo-details">
+            <h2>Details / Tips</h2>
+            <div class="details-content">
+                <h3>Today's Tip</h3>
+                <p>Start your day by tackling the most challenging task. It gives you a sense of achievement and makes the rest of the day feel more manageable.</p>
 
+                <h3>Inspiration</h3>
+                <p>"Your limitation—it's only your imagination."</p>
+            </div>
+        </div>
     </div>
 
     <footer class="footer">
-      <p>© 2024 To-Do Lists AB. Alla rättigheter förbehållna.</p>
+        <p>© 2024 To-Do Lists AB. Alla rättigheter förbehållna.</p>
     </footer>
-  </body>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', (event) => {
+        const todoLists = document.querySelector(".todo-lists");
+     let selectedTodoID = null;
+
+  todoLists.forEach(div => {
+    div.addEventListener('click', function() {
+        //Stylar färgen på alla andra divar till vanligt (detta är bara för att det ska se snyggt ut)
+        mediaDivs.forEach(otherDiv => {
+            otherDiv.style.backgroundColor = ""; 
+        });
+
+        //stylar färgen på den div som klickas på till röd (detta är bara för att det ska se snyggt ut)
+        this.style.backgroundColor = "red"; 
+
+        //Sparar listID för den klickade diven
+        selectedTodoID = this.querySelector('.list-item').textContent;
+    });
+});
+
+   const deleteButton = document.querySelector('.btn-delete');
+
+  deleteButton.addEventListener('click', function() {
+    //Om en todo är vald så skickas den till backend för att tas bort
+    if (selectedTodoID) {
+        console.log("clicked")
+        //Inställningar för hur den ska skickas
+        const options = {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({listID: selectedTodoID})
+        };
+        fetch('/delete', options)
+            .then(response => {
+                if (response.ok) {
+                    location.reload();
+                } else {
+                    throw new Error('Failed to send data');
+                }
+            })
+          }
+       });
+      });
+
+</script>
+
+
+</body>
 </html>

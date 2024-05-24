@@ -3,12 +3,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const listNameInput = document.querySelector("#list-name-input");
   const saveListButton = document.querySelector("#save-list-button");
   const myListContainer = document.querySelector(".todo-lists");
-
+  
   addListButton.addEventListener("click", () => {
     console.log("List button clicked");
     listNameInput.classList.add("show");
     saveListButton.classList.add("show");
   });
+
 
   saveListButton.addEventListener("click", async () => {
     const listName = listNameInput.value.trim();
@@ -46,5 +47,5 @@ document.addEventListener("DOMContentLoaded", () => {
           .json({ message: "Internal server error", error: error.toString() });
       }
     }
-  });
+  })
 });
