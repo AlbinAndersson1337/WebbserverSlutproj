@@ -33,7 +33,7 @@
               {{#each lists}}
                  <div class="list-item" data-id="{{id}}">
                    <span>{{name}}</span>
-                   <button class="btn-delete" onclick="deleteList('{{id}}')">X</button>
+                   <button class="btn-delete"'{{id}}'>X</button>
                 </div>
               {{/each}}
 
@@ -55,53 +55,7 @@
         <p>© 2024 To-Do Lists AB. Alla rättigheter förbehållna.</p>
     </footer>
 
-    <script>
-      document.addEventListener('DOMContentLoaded', (event) => {
-        const todoLists = document.querySelector(".todo-lists");
-     let selectedTodoID = null;
-
-  todoLists.forEach(div => {
-    div.addEventListener('click', function() {
-        //Stylar färgen på alla andra divar till vanligt (detta är bara för att det ska se snyggt ut)
-        mediaDivs.forEach(otherDiv => {
-            otherDiv.style.backgroundColor = ""; 
-        });
-
-        //stylar färgen på den div som klickas på till röd (detta är bara för att det ska se snyggt ut)
-        this.style.backgroundColor = "red"; 
-
-        //Sparar listID för den klickade diven
-        selectedTodoID = this.querySelector('.list-item').textContent;
-    });
-});
-
-   const deleteButton = document.querySelector('.btn-delete');
-
-  deleteButton.addEventListener('click', function() {
-    //Om en todo är vald så skickas den till backend för att tas bort
-    if (selectedTodoID) {
-        console.log("clicked")
-        //Inställningar för hur den ska skickas
-        const options = {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({listID: selectedTodoID})
-        };
-        fetch('/delete', options)
-            .then(response => {
-                if (response.ok) {
-                    location.reload();
-                } else {
-                    throw new Error('Failed to send data');
-                }
-            })
-          }
-       });
-      });
-
-</script>
+ 
 
 
 </body>
