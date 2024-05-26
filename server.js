@@ -72,6 +72,8 @@ app.get("/todo", (req, res) => {
   );
 });
 
+
+
 app.get("/", (req, res) => {
   if (req.session.isLoggedIn) {
     res.render("todo", {
@@ -222,6 +224,7 @@ app.post('/delete', (req, res) => {
       }
   })
 });
+
 
 
 
